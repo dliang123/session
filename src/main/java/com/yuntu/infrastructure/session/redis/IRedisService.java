@@ -7,6 +7,8 @@ import java.util.List;
  */
 public interface IRedisService {
 
+    public void delete(String key);
+
     public boolean set(String key, String value);
 
     public String get(String key);

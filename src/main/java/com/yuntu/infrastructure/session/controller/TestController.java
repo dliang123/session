@@ -20,7 +20,6 @@ import java.util.List;
  */
 @Controller
 @EnableAutoConfiguration
-@ComponentScan(basePackages = "com.yuntu")
 public class TestController {
 
     @Autowired

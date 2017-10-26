@@ -22,6 +22,12 @@ public class RedisServiceImpl implements IRedisService {
     @Autowired
     private RedisTemplate<String, ?> redisTemplate;
 
+
+    @Override
+    public void delete(String key) {
+        redisTemplate.delete(key);
+    }
+
     @Override
     public boolean set(final String key, final String value) {
         boolean result = redisTemplate.execute(
@@ -40,12 +46,12 @@ public class RedisServiceImpl implements IRedisService {
 
 
     @Override
-    public String get(final String key){
+    public String get(final String key) {
         String result = redisTemplate.execute(new RedisCallback<String>() {
             @Override
             public String doInRedis(RedisConnection connection) throws DataAccessException {
                 RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
-                byte[] value =  connection.get(serializer.serialize(key));
+                byte[] value = connection.get(serializer.serialize(key));
                 return serializer.deserialize(value);
             }
         });
@@ -60,13 +66,13 @@ public class RedisServiceImpl implements IRedisService {
     @Override
     public <T> boolean setList(String key, List<T> list) {
         String value = JsonUtil.toJson(list);
-        return set(key,value);
+        return set(key, value);
     }
 
     @Override
-    public <T> List<T> getList(String key,Class<T> clz) {
+    public <T> List<T> getList(String key, Class<T> clz) {
         String json = get(key);
-        if(json!=null){
+        if (json != null) {
             List<T> list = JsonUtil.toList(json, clz);
             return list;
         }
@@ -107,7 +113,7 @@ public class RedisServiceImpl implements IRedisService {
             @Override
             public String doInRedis(RedisConnection connection) throws DataAccessException {
                 RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
-                byte[] res =  connection.lPop(serializer.serialize(key));
+                byte[] res = connection.lPop(serializer.serialize(key));
                 return serializer.deserialize(res);
             }
         });
